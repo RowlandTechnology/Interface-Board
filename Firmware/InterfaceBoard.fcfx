@@ -1,6 +1,6 @@
 <root>
-<document scada='0' schema='102' license='1,Dev User,H1YQFU' title='' description='' fcversion='524544' target='PIC.18F.18F24K50' >
-	<config data='!0,e823!10,3c5f!20,d100!30,ffa1!40,c00f!50,e00f!60,400f%0,1%1,1%3,0%5,1%8,8%d,1%e,1%f,1%10,1%11,3%13,3%16,1%18,0%1a,f%28,1%29,0%2c,1%2e,1%2f,1%30,1%32,0%36,0%37,1%40,1%41,1%4e,1%4f,1%50,1%51,1%5d,1%5e,1%5f,1%60,1%61,1%6e,1' clkspd='48000000' simspd='1' usewdt='0' constif='0' />
+<document scada='0' schema='102' license='1,Dev User,H1YQFU' title='' description='' fcversion='524800' target='PIC.18F.18F24K50' >
+	<config data='!0,e823!10,3c5f!20,d100!30,ffa1!40,c00f!50,e00f!60,400f%0,1%1,1%3,0%5,1%8,8%d,1%e,1%f,1%10,1%11,3%13,3%16,1%18,0%1a,f%28,1%29,0%2c,1%2e,1%2f,1%30,1%32,0%36,0%37,1%40,1%41,1%4e,1%4f,1%50,1%51,1%5d,1%5e,1%5f,1%60,1%61,1%6e,1' clkspd='48000000' simspd='1' usewdt='0' constif='0' Use3V3='0' />
 	<plugins >
 		<dll_models enabled='1' />
 	</plugins>
@@ -14,6 +14,7 @@
 
 MX_Union_32 convert;' body='' />
 	<debug />
+	<traces />
 	<ghost >
 		<FK2 >
 			<data name='FK2D0' port='4294967295' pin='4294967295' />
@@ -53,6 +54,8 @@ MX_Union_32 convert;' body='' />
 			<data name='CommsDelayOverridden' value='0' />
 			<data name='CommsDelay' value='4' />
 			<data name='CalculatedCommsDelay' value='4' />
+			<data name='AnalogEB2PrescaleValue' value='2' />
+			<data name='DigitalEB2SampleRate' value='100000' />
 		</ICD>
 		<pins >
 			<digital A='0' B='0' C='0' D='0' E='0' F='0' G='0' H='0' I='0' J='0' K='0' L='0' M='0' N='0' O='0' P='0' Q='0' R='0' S='0' T='0' U='0' V='0' W='0' X='0' Y='0' Z='0' />
@@ -286,16 +289,6 @@ If no parameters or returns are required then the command is performed' >
 								</flowline>
 							</case>
 						</command>
-						<command class_type='decision' title='Decision' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x91' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='UART Baud' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='calculation' title='Number of param bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='ParamCount = 1' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
 						<command class_type='switch' title='UART Commands' textarea='36,25,36,25' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command' >
 							<case >
 								<flowline />
@@ -334,6 +327,9 @@ If no parameters or returns are required then the command is performed' >
 									<command class_type='calculation' title='Number of return bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
 										<exp exp='ReturnCount = 1' />
 									</command>
+									<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommsBuffer' macro='GetNumberBytes' >
+										<return exp='Returns[0]' />
+									</command>
 									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
 								</flowline>
 							</case>
@@ -342,6 +338,9 @@ If no parameters or returns are required then the command is performed' >
 									<command class_type='comment' title='' comment='UART RX' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
 									<command class_type='calculation' title='Number of return bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
 										<exp exp='ReturnCount = 1' />
+									</command>
+									<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommsBuffer' macro='GetByte' >
+										<return exp='Returns[0]' />
 									</command>
 									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
 								</flowline>
@@ -1132,26 +1131,6 @@ else if (FCV_PARAMS[0] == 17)
 								<command class_type='comment' title='' comment='UART TX' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
 								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendChar' >
 									<argument exp='Params[0]' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x8F' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='UART RX Count' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommsBuffer' macro='GetNumberBytes' >
-									<return exp='Returns[0]' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x90' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='UART RX' textarea='36,5,36,5' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommsBuffer' macro='GetByte' >
-									<return exp='Returns[0]' />
 								</command>
 								<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
 							</flowline>
@@ -2119,10 +2098,6 @@ Stores result in WIFIConnected variable' >
 						</command>
 						<command class_type='native' title='Init LED tris' ccode='TRISBbits.TRISB5 = 0;
 LATBbits.LATB5 = 0;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
-						<command class_type='call' title='Call Component Macro' disable='1' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Read' >
-							<return exp='CommsBAUD' />
-							<argument exp='42' />
-						</command>
 						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPStart' />
 						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='WIFIActive' swap='0' >
 							<flowline >
@@ -2465,8 +2440,8 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<properties />
 				<values >
 					<value target='cal_i2c::CHANNEL' data='000' />
-					<value target='cal_i2c::BAUD_LIST' data='003' />
-					<value target='cal_i2c::BAUD' data='1000000' />
+					<value target='cal_i2c::BAUD_LIST' data='001' />
+					<value target='cal_i2c::BAUD' data='100000' />
 					<value target='cal_i2c::StopDel' data='0' />
 					<value target='cal_i2c::SRC' data='000' />
 					<value target='cal_i2c::SMB' data='000' />
@@ -2499,6 +2474,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 					<value target='pin6' data='$PORTB.7' />
 					<value target='pin7' data='$PORTB.7' />
 					<value target='Peripherals' data='PWM0 + PWM1 + Timer1' />
+					<value target='TrimMode' data='001' />
 					<value target='trim0' data='000' />
 					<value target='trim1' data='0' />
 					<value target='trim2' data='0' />
@@ -2508,17 +2484,17 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 					<value target='trim6' data='000' />
 					<value target='trim7' data='0' />
 					<value target='min_pulse_width' data='1000' />
-					<value target='max_pulse_width' data='2000' />
-					<value target='CCPLo' data='204' />
-					<value target='CCPHi' data='93' />
+					<value target='max_pulse_width' data='2500' />
+					<value target='CCPLo' data='48' />
+					<value target='CCPHi' data='117' />
 					<value target='Servo_Clock_Count_25' data='300' />
 					<value target='Servo_Clock_Count_1280' data='12003' />
-					<value target='Servo_Clock_Count_2500' data='24012' />
-					<value target='Servo_Period_Multiplier' data='46' />
-					<value target='IntRange' data='0 - 11775' />
+					<value target='Servo_Clock_Count_2500' data='30000' />
+					<value target='Servo_Period_Multiplier' data='70' />
+					<value target='IntRange' data='0 - 17919' />
 					<value target='Divider' data='0' />
-					<value target='RoundUp' data='1' />
-					<value target='IntScaler' data='0.183246' />
+					<value target='RoundUp' data='0' />
+					<value target='IntScaler' data='0.274617' />
 					<value target='sim0' data='' />
 					<value target='sim1' data='' />
 					<value target='sim2' data='' />
@@ -2714,7 +2690,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<variables />
 				<macros />
 			</component>
-			<component class_type='ref' guid='1a8c2bb7-8bed-4a1c-9186-ba24688c8840' vmin='3' vmaj='1' codename='slider_plastic1' x='-210' y='0' z='5' xsz='12.502' ysz='112.5' zsz='10' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
+			<component class_type='ref' guid='1a8c2bb7-8bed-4a1c-9186-ba24688c8840' vmin='3' vmaj='1' codename='slider_plastic1' x='-210' y='0' z='5' xsz='1' ysz='1' zsz='10' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
 				<resources />
 				<properties />
 				<values >
@@ -2771,7 +2747,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 	<keymap />
 	<panel2d shadows='0' lighting='2' brightness='0' >
 		<background rgb='7292207' img='' style='0' />
-		<camera xe='-17.5765' ye='-12.9425' ze='444.576' xt='-17.5765' yt='-12.9425' zt='0' xquat='0' yquat='0' zquat='0' wquat='1' />
+		<camera xe='-34.0336' ye='-19.365' ze='1096.15' xt='-34.0336' yt='-19.365' zt='0' xquat='0' yquat='0' zquat='0' wquat='1' />
 	</panel2d>
 	<panel3d shadows='0' lighting='2' brightness='0' perspective='1' >
 		<background rgb='8409120' img='' style='0' />
@@ -2786,18 +2762,18 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 		<camerakey6 xe='-173.205' ye='-173.205' ze='173.205' xt='0' yt='0' zt='0' xquat='-0.424708' yquat='0.17592' zquat='0.339851' wquat='0.820473' />
 	</panel3d>
 	<layout >
-		<view type='0' name='ActionCommand' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='80' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='UART_Receive_Interrupt_Handler' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='MatchCommand' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='Main' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='80' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='StoreEEString' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPStart' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPInit' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPControlTCPServer' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPConnectToSSID' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPCheckTCPServerIP' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='GetEEString' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='LEDBlink' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='MatchCommand' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='528' flags='0' />
+		<view type='0' name='ActionCommand' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='80' scrollx='0' scrolly='5889' flags='0' />
+		<view type='0' name='Main' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='80' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='UART_Receive_Interrupt_Handler' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ESPStart' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='StoreEEString' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ESPInit' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ESPControlTCPServer' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ESPConnectToSSID' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ESPCheckTCPServerIP' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='GetEEString' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='LEDBlink' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA6gYAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
 	</layout>
 </document>
 </root>
