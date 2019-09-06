@@ -1,6 +1,6 @@
 <root>
-<document scada='0' schema='102' license='1,Dev User,H1YQFU' title='' description='' fcversion='524544' target='PIC.18F.18F24K50' >
-	<config data='!0,e823!10,3c5f!20,d100!30,ffa1!40,c00f!50,e00f!60,400f%0,1%1,1%3,0%5,1%8,8%d,1%e,1%f,1%10,1%11,3%13,3%16,1%18,0%1a,f%28,1%29,0%2c,1%2e,1%2f,1%30,1%32,0%36,0%37,1%40,1%41,1%4e,1%4f,1%50,1%51,1%5d,1%5e,1%5f,1%60,1%61,1%6e,1' clkspd='48000000' simspd='1' usewdt='0' constif='0' />
+<document scada='0' schema='102' license='1,Dev User,H1YQFU' title='' description='' fcversion='524800' target='PIC.18F.18F24K50' >
+	<config data='!0,e823!10,3c5f!20,d100!30,ffa1!40,c00f!50,e00f!60,400f%0,1%1,1%3,0%5,1%8,8%d,1%e,1%f,1%10,1%11,3%13,3%16,1%18,0%1a,f%28,1%29,0%2c,1%2e,1%2f,1%30,1%32,0%36,0%37,1%40,1%41,1%4e,1%4f,1%50,1%51,1%5d,1%5e,1%5f,1%60,1%61,1%6e,1' clkspd='48000000' simspd='1' usewdt='0' constif='0' Use3V3='0' />
 	<plugins >
 		<dll_models enabled='1' />
 	</plugins>
@@ -14,6 +14,7 @@
 
 MX_Union_32 convert;' body='' />
 	<debug />
+	<traces />
 	<ghost >
 		<FK2 >
 			<data name='FK2D0' port='4294967295' pin='4294967295' />
@@ -53,6 +54,8 @@ MX_Union_32 convert;' body='' />
 			<data name='CommsDelayOverridden' value='0' />
 			<data name='CommsDelay' value='4' />
 			<data name='CalculatedCommsDelay' value='4' />
+			<data name='AnalogEB2PrescaleValue' value='2' />
+			<data name='DigitalEB2SampleRate' value='100000' />
 		</ICD>
 		<pins >
 			<digital A='0' B='0' C='0' D='0' E='0' F='0' G='0' H='0' I='0' J='0' K='0' L='0' M='0' N='0' O='0' P='0' Q='0' R='0' S='0' T='0' U='0' V='0' W='0' X='0' Y='0' Z='0' />
@@ -61,16 +64,11 @@ MX_Union_32 convert;' body='' />
 	</ghost>
 	<components >
 		<settings autoimg='1' center='1' unitscale='0' fixedscale='0' fixedx='1' fixedy='1' fixedz='1' headcode='0' />
-		<definition guid='cc0c6f87-a58f-4d73-8a8f-a717445ec8e9' vstate='40' vmin='0' vmaj='1' srcleaf='' visiblename='' description='' category='' catenable='1' author='' manuname='' manucode='' sysinfo='0' keywords='' dynamic='1' scadaCompatible='0' embeddedCompatible='1' iconpath='' />
+		<definition guid='cc0c6f87-a58f-4d73-8a8f-a717445ec8e9' vstate='40' vmin='0' vmaj='1' srcleaf='' visiblename='' description='' category='Misc' catenable='1' author='' manuname='' manucode='' sysinfo='0' keywords='' dynamic='1' scadaCompatible='0' embeddedCompatible='1' iconpath='' />
 		<component class_type='root' codename='panel' x='0' y='0' z='0' xsz='1' ysz='1' zsz='1' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='0' poslock='0' >
 			<resources />
-			<properties >
-				<property name='CommsType' target='CommsType' typeid='16' hidden='0' locked='0' info='' filter='000UART
-001SPI' />
-			</properties>
-			<values >
-				<value target='CommsType' data='000' />
-			</values>
+			<properties />
+			<values />
 			<events />
 			<apis />
 			<variables >
@@ -79,6 +77,9 @@ MX_Union_32 convert;' body='' />
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='count' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
+				</variable>
+				<variable public='0' >
+					<def class_type='variable' name='page' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='ReturnCount' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
@@ -93,6 +94,9 @@ MX_Union_32 convert;' body='' />
 					<def class_type='variable' name='StrCounter' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
 				</variable>
 				<variable public='0' >
+					<def class_type='variable' name='status' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
+				</variable>
+				<variable public='0' >
 					<def class_type='variable' name='false' type='b1' description='' isconst='1' isinit='1' usrinit='0' setinit='0' />
 				</variable>
 				<variable public='0' >
@@ -100,27 +104,25 @@ MX_Union_32 convert;' body='' />
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='Pass' type='T8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-						<array size='50' />
+						<array size='33' />
 					</def>
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='SSID' type='T8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-						<array size='50' />
+						<array size='33' />
 					</def>
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='WIFIMux' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
 				</variable>
 				<variable public='0' >
+					<def class_type='variable' name='Idx' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
+				</variable>
+				<variable public='0' >
 					<def class_type='variable' name='ParamCount' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='Returns' type='u8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-						<array size='20' />
-					</def>
-				</variable>
-				<variable public='0' >
-					<def class_type='variable' name='WIFIIP' type='T8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
 						<array size='20' />
 					</def>
 				</variable>
@@ -132,6 +134,9 @@ MX_Union_32 convert;' body='' />
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='CommsBAUD' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
+				</variable>
+				<variable public='0' >
+					<def class_type='variable' name='LEDBrightness' type='u8' description='' isconst='0' isinit='1' usrinit='0' setinit='0' />
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='ParamIdx' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
@@ -146,18 +151,164 @@ MX_Union_32 convert;' body='' />
 					<def class_type='variable' name='WIFIActive' type='b1' description='' isconst='0' isinit='1' usrinit='0' setinit='0' />
 				</variable>
 				<variable public='0' >
+					<def class_type='variable' name='CmdData' type='u8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
+						<array size='5' />
+					</def>
+				</variable>
+				<variable public='0' >
 					<def class_type='variable' name='MuxState' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='Params' type='u8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-						<array size='50' />
+						<array size='5' />
 					</def>
+				</variable>
+				<variable public='0' >
+					<def class_type='variable' name='TimerCount' type='u8' description='' isconst='0' isinit='1' usrinit='0' setinit='0' />
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='true' type='b1' description='' isconst='1' isinit='1' usrinit='1' setinit='1' />
 				</variable>
 			</variables>
 			<macros >
+				<macro >
+					<flowline name='InitESP' description='' >
+						<return name='Return' type='v0' description='' isconst='0' isinit='0' usrinit='' setinit='' />
+						<command class_type='calculation' title='Calculation' disable='1' cmdcolor='16760919' cmdcolor_sec='16760832' >
+							<exp exp='ssid = &quot;OakesWifi&quot;' />
+							<exp exp='pass = &quot;Jammin01&quot;' />
+						</command>
+						<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+							<exp exp='LEDBrightness = 30' />
+						</command>
+						<command class_type='comment' title='' comment='Collect Network details from EEPROM' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
+						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='GetEEString' >
+							<return exp='SSID' />
+							<argument exp='0' />
+						</command>
+						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='GetEEString' >
+							<return exp='Pass' />
+							<argument exp='36' />
+						</command>
+						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='Initialise' />
+						<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+							<exp exp='status = 0' />
+						</command>
+						<command class_type='decision' title='Does SSID contain a valid string' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Length$ (ssid)' swap='0' >
+							<flowline >
+								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='ConnectToSSID' >
+									<return exp='status' />
+									<argument exp='ssid' />
+									<argument exp='pass' />
+									<argument exp='20' />
+								</command>
+								<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='status' swap='0' >
+									<flowline >
+										<command class_type='comment' title='' comment='Stored SSID connected - Skip straight to API mode' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
+										<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='ControlTCPServer' >
+											<argument exp='1' />
+											<argument exp='80' />
+										</command>
+									</flowline>
+									<flowline >
+										<command class_type='comment' title='' comment='Stored SSID not connected - Default to internal setup server' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
+										<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='CreateAccessPoint' >
+											<argument exp='&quot;InterfaceBoard&quot;' />
+											<argument exp='&quot;password&quot;' />
+											<argument exp='1' />
+											<argument exp='3' />
+										</command>
+										<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='ControlTCPServer' >
+											<argument exp='1' />
+											<argument exp='80' />
+										</command>
+									</flowline>
+								</command>
+							</flowline>
+							<flowline >
+								<command class_type='comment' title='' comment='No Stored details - Default to internal setup server' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
+								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='CreateAccessPoint' >
+									<argument exp='&quot;InterfaceBoard&quot;' />
+									<argument exp='&quot;password&quot;' />
+									<argument exp='1' />
+									<argument exp='3' />
+								</command>
+								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='ControlTCPServer' >
+									<argument exp='1' />
+									<argument exp='80' />
+								</command>
+							</flowline>
+						</command>
+						<command class_type='comment' title='' comment='Service internal server' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
+						<command class_type='loop' title='Loop' cmdcolor='12615680' cmdcolor_sec='15376912' type='0' exp='status = 0' >
+							<flowline >
+								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='CheckForPageRequests' >
+									<return exp='page' />
+								</command>
+								<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='page = 2' swap='0' >
+									<flowline >
+										<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='GetInValue' >
+											<return exp='ssid' />
+											<argument exp='0' />
+										</command>
+										<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='GetInValue' >
+											<return exp='pass' />
+											<argument exp='1' />
+										</command>
+										<command class_type='decision' title='Do we have a valid SSID String' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Length$ (ssid)' swap='0' >
+											<flowline >
+												<command class_type='comment' title='' comment='Store SSID and Password' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
+												<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='StoreEEString' >
+													<argument exp='0' />
+													<argument exp='ssid' />
+												</command>
+												<command class_type='call' title='' cmdcolor='1879295' cmdcolor_sec='5751039' macro='StoreEEString' >
+													<argument exp='36' />
+													<argument exp='Pass' />
+												</command>
+												<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='LEDBlink' />
+												<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+													<exp exp='LEDBrightness = 30' />
+												</command>
+												<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='ConnectToSSID' >
+													<return exp='status' />
+													<argument exp='ssid' />
+													<argument exp='pass' />
+													<argument exp='20' />
+												</command>
+												<command class_type='decision' title='SSID Connected?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='status' swap='0' >
+													<flowline >
+														<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='ControlTCPServer' >
+															<argument exp='1' />
+															<argument exp='80' />
+														</command>
+													</flowline>
+													<flowline >
+														<command class_type='call' title='Call Component Macro' textarea='36,29,36,29' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='CreateAccessPoint' >
+															<argument exp='&quot;InterfaceBoard&quot;' />
+															<argument exp='&quot;password&quot;' />
+															<argument exp='1' />
+															<argument exp='3' />
+														</command>
+														<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='ControlTCPServer' >
+															<argument exp='1' />
+															<argument exp='80' />
+														</command>
+													</flowline>
+												</command>
+											</flowline>
+											<flowline />
+										</command>
+									</flowline>
+									<flowline />
+								</command>
+								<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+									<exp exp='LEDBrightness = (~LEDBrightness) &amp; 31' />
+								</command>
+							</flowline>
+						</command>
+					</flowline>
+				</macro>
 				<macro >
 					<flowline name='MatchCommand' description='Looks for a matching command code and assigns parameter and return counters.
 If no parameters or returns are required then the command is performed' >
@@ -281,63 +432,6 @@ If no parameters or returns are required then the command is performed' >
 									</command>
 									<command class_type='calculation' title='Number of return bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
 										<exp exp='ReturnCount = 1' />
-									</command>
-									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x91' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='UART Baud' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='calculation' title='Number of param bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='ParamCount = 1' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='switch' title='UART Commands' textarea='36,25,36,25' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command' >
-							<case >
-								<flowline />
-							</case>
-							<case exp='0x8D' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART Init' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-							<case exp='0x8E' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART TX' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='calculation' title='Number of param bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
-										<exp exp='ParamCount = 1' />
-									</command>
-									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-							<case exp='0x8F' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART RX Count' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='calculation' title='Number of return bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
-										<exp exp='ReturnCount = 1' />
-									</command>
-									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-							<case exp='0x90' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART RX' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='calculation' title='Number of return bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
-										<exp exp='ReturnCount = 1' />
-									</command>
-									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-							<case exp='0x91' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART Baud' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='calculation' title='Number of param bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
-										<exp exp='ParamCount = 1' />
 									</command>
 									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
 								</flowline>
@@ -477,7 +571,7 @@ If no parameters or returns are required then the command is performed' >
 								</flowline>
 							</case>
 						</command>
-						<command class_type='switch' title='Switch' textarea='36,25,36,25' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command' >
+						<command class_type='switch' title='Switch' textarea='36,25,36,25' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command' >
 							<case >
 								<flowline />
 							</case>
@@ -520,23 +614,6 @@ If no parameters or returns are required then the command is performed' >
 							<case exp='0xA3' >
 								<flowline >
 									<command class_type='comment' title='' comment='WIFI IP Address' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='calculation' title='Number of return bytes' cmdcolor='16760919' cmdcolor_sec='16760832' >
-										<exp exp='ReturnCount = Length$ (WIFIIP)' />
-									</command>
-									<command class_type='calculation' title='Reset counter' cmdcolor='16760919' cmdcolor_sec='16760832' >
-										<exp exp='.idx = 0' />
-									</command>
-									<command class_type='loop' title='Loop' cmdcolor='12615680' cmdcolor_sec='15376912' type='0' exp='.idx &lt; ReturnCount' >
-										<flowline >
-											<command class_type='calculation' title='Copy String to Returns array' cmdcolor='16760919' cmdcolor_sec='16760832' >
-												<exp exp='Returns[.idx] = WIFIIP[.idx]' />
-												<exp exp='' />
-											</command>
-											<command class_type='calculation' title='Increment counter' cmdcolor='16760919' cmdcolor_sec='16760832' >
-												<exp exp='.idx = .idx + 1' />
-											</command>
-										</flowline>
-									</command>
 									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
 								</flowline>
 							</case>
@@ -1114,92 +1191,6 @@ else if (FCV_PARAMS[0] == 17)
 								</flowline>
 							</case>
 						</command>
-						<command class_type='decision' title='Decision' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x8E' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='UART TX' textarea='12,0,12,0' disable='1' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='call' title='Call Component Macro' disable='1' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendChar' >
-									<argument exp='Params[0]' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='decision' title='Decision' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x8F' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='UART RX Count' textarea='12,0,12,0' disable='1' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='call' title='Call Component Macro' disable='1' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='GetNumberBytes' >
-									<return exp='Returns[0]' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='decision' title='Decision' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x90' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='UART RX' textarea='36,5,36,5' disable='1' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='call' title='Call Component Macro' disable='1' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='GetByte' >
-									<return exp='Returns[0]' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x91' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='UART Baud' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='ChangeHWBaud' >
-									<argument exp='Params[0]' />
-								</command>
-								<command class_type='call' title='Update stored UART BAUD' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Write' >
-									<argument exp='42' />
-									<argument exp='params[0]' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='switch' title='UART Commands' textarea='36,25,36,25' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command' >
-							<case >
-								<flowline />
-							</case>
-							<case exp='0x8D' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART Init' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								</flowline>
-							</case>
-							<case exp='0x8E' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART TX' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendChar' >
-										<argument exp='Params[0]' />
-									</command>
-								</flowline>
-							</case>
-							<case exp='0x8F' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART RX Count' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='GetNumberBytes' >
-										<return exp='Returns[0]' />
-									</command>
-								</flowline>
-							</case>
-							<case exp='0x90' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART RX' textarea='36,5,36,5' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='GetByte' >
-										<return exp='Returns[0]' />
-									</command>
-								</flowline>
-							</case>
-							<case exp='0x91' >
-								<flowline >
-									<command class_type='comment' title='' comment='UART Baud' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='ChangeHWBaud' >
-										<argument exp='Params[0]' />
-									</command>
-								</flowline>
-							</case>
-						</command>
 						<command class_type='switch' title='PWM Commands' textarea='36,25,36,25' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command' >
 							<case >
 								<flowline />
@@ -1432,7 +1423,7 @@ FC_CAL_ADC_Disable();' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
 							</flowline>
 							<flowline />
 						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x9B' swap='0' >
+						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0x9F' swap='0' >
 							<flowline >
 								<command class_type='comment' title='' comment='DAC Set Output' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
 								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='DAC_Output1' macro='SetOutput' >
@@ -1538,110 +1529,6 @@ FC_CAL_ADC_Disable();' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
 								</flowline>
 							</case>
 						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0xA0' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='WIFI SSID / PASSWORD' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='StoreEEString' >
-									<argument exp='0' />
-									<argument exp='SSID' />
-								</command>
-								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPStart' />
-								<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='Returns[0] = WIFIConnected' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0xA1' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='WIFI Password' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='StoreEEString' >
-									<argument exp='20' />
-									<argument exp='Pass' />
-								</command>
-								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPStart' />
-								<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='Returns[0] = WIFIConnected' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command = 0xA4' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='WIFI Port' textarea='36,-12,36,-12' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='call' title='Call Component Macro' textarea='36,-12,36,-12' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Write' >
-									<argument exp='40' />
-									<argument exp='params[0]' />
-								</command>
-								<command class_type='call' title='Call Component Macro' textarea='36,-12,36,-12' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Write' >
-									<argument exp='41' />
-									<argument exp='params[1]' />
-								</command>
-								<command class_type='goto' title='Goto Connection Point' textarea='36,-12,36,-12' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-							</flowline>
-							<flowline />
-						</command>
-						<command class_type='switch' title='Switch' textarea='36,25,36,25' disable='1' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Command' >
-							<case >
-								<flowline />
-							</case>
-							<case exp='0xA0' >
-								<flowline >
-									<command class_type='comment' title='' comment='WIFI SSID / PASSWORD' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='StoreEEString' >
-										<argument exp='0' />
-										<argument exp='SSID' />
-									</command>
-									<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPStart' />
-									<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-										<exp exp='Returns[0] = WIFIConnected' />
-									</command>
-									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-							<case exp='0xA1' >
-								<flowline >
-									<command class_type='comment' title='' comment='WIFI Password' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='StoreEEString' >
-										<argument exp='20' />
-										<argument exp='Pass' />
-									</command>
-									<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPStart' />
-									<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-										<exp exp='Returns[0] = WIFIConnected' />
-									</command>
-									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-							<case exp='0xA2' >
-								<flowline >
-									<command class_type='comment' title='' comment='WIFI Is Connected?' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='goto' title='Goto Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-							<case exp='0xA3' >
-								<flowline >
-									<command class_type='comment' title='' comment='WIFI IP Address' textarea='36,4,36,4' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='goto' title='Goto Connection Point' textarea='36,4,36,4' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-							<case exp='0xA4' >
-								<flowline >
-									<command class_type='comment' title='' comment='WIFI Port' textarea='36,-12,36,-12' cmdcolor='10944511' cmdcolor_sec='11465458' />
-									<command class_type='call' title='Call Component Macro' textarea='36,-12,36,-12' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Write' >
-										<argument exp='40' />
-										<argument exp='params[0]' />
-									</command>
-									<command class_type='call' title='Call Component Macro' textarea='36,-12,36,-12' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Write' >
-										<argument exp='41' />
-										<argument exp='params[1]' />
-									</command>
-									<command class_type='goto' title='Goto Connection Point' textarea='36,-12,36,-12' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='' />
-								</flowline>
-							</case>
-						</command>
 						<command class_type='label' title='Connection Point' cmdcolor='12615680' cmdcolor_sec='15376912' labelid='0' labelname='A' />
 						<command class_type='decision' title='Do we need to send returns' cmdcolor='12615680' cmdcolor_sec='15376912' exp='ReturnCount &gt; 0' swap='0' >
 							<flowline >
@@ -1655,54 +1542,6 @@ FC_CAL_ADC_Disable();' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
 									<exp exp='Mode = 0' />
 								</command>
 							</flowline>
-						</command>
-					</flowline>
-				</macro>
-				<macro >
-					<flowline name='ESPCheckTCPServerIP' description='Collects the local IP address of the active TCP server.' >
-						<return name='Return' type='T8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' />
-						<local name='in' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
-						<local name='idx' type='u8' description='' isconst='0' isinit='1' usrinit='0' setinit='0' />
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='FlushBuffer' />
-						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-							<argument exp='&quot;AT+CIFSR\r\n&quot;' />
-						</command>
-						<command class_type='call' title='Find opening quote - delete' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<argument exp='&quot;\&quot;&quot;' />
-							<argument exp='1' />
-							<argument exp='1' />
-							<argument exp='2750' />
-						</command>
-						<command class_type='call' title='Find Closing Quote - Keep' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<argument exp='&quot;\&quot;&quot;' />
-							<argument exp='1' />
-							<argument exp='0' />
-							<argument exp='2750' />
-						</command>
-						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='GetByte' >
-							<return exp='.in' />
-						</command>
-						<command class_type='loop' title='Loop' cmdcolor='12615680' cmdcolor_sec='15376912' type='0' exp='.in != &apos;\&quot;&apos;' >
-							<flowline >
-								<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='.Return[.idx] = .in' />
-								</command>
-								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='GetByte' >
-									<return exp='.in' />
-								</command>
-								<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='.idx = .idx + 1' />
-								</command>
-							</flowline>
-						</command>
-						<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-							<exp exp='.Return[.idx] = 0' />
-						</command>
-						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<argument exp='&quot;OK&quot;' />
-							<argument exp='2' />
-							<argument exp='1' />
-							<argument exp='2750' />
 						</command>
 					</flowline>
 				</macro>
@@ -1721,7 +1560,7 @@ FC_CAL_ADC_Disable();' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
 									<return exp='.data' />
 									<argument exp='.Location + .Idx' />
 								</command>
-								<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.data = 255' swap='0' >
+								<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.data &gt; 127' swap='0' >
 									<flowline >
 										<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
 											<exp exp='.data = 0' />
@@ -1740,346 +1579,35 @@ FC_CAL_ADC_Disable();' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
 					</flowline>
 				</macro>
 				<macro >
-					<flowline name='ESPControlTCPServer' description='Allows a TCP web page server to be switched on and off on the selected port.
-Returns 1 if the command was completed correctly.' >
-						<return name='Return' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
-						<param name='Enable' type='u8' description='0 = Stop Server, 1 = Start Server' isconst='0' isinit='0' usrinit='0' setinit='' />
-						<param name='Port' type='u16' description='Server port to listen for incoming TCP/IP data requests' isconst='0' isinit='0' usrinit='0' setinit='' />
-						<local name='Command' type='T8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-							<array size='50' />
-						</local>
-						<local name='TempStr' type='T8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-							<array size='6' />
-						</local>
-						<command class_type='calculation' title='Convert port number to string' cmdcolor='16760919' cmdcolor_sec='16760832' >
-							<exp exp='.TempStr = STRING .Port' />
-						</command>
-						<command class_type='calculation' title='Initialise command string' cmdcolor='16760919' cmdcolor_sec='16760832' >
-							<exp exp='.Command = &quot;AT+CIPSERVER=&quot;' />
-						</command>
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='FlushBuffer' />
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.Enable = 1' swap='0' >
-							<flowline >
-								<command class_type='calculation' title='Start Server' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='.Command = .Command + &quot;1,&quot;' />
-								</command>
-								<command class_type='call' title='Must be Multi Connection for server to work' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-									<argument exp='&quot;AT+CIPMUX=1\r\n&quot;' />
-								</command>
-							</flowline>
-							<flowline >
-								<command class_type='calculation' title='Stop Server' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='.Command = .Command + &quot;0,&quot;' />
-								</command>
-								<command class_type='call' title='Revert to Single Connection' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-									<argument exp='&quot;AT+CIPMUX=0\r\n&quot;' />
-								</command>
-							</flowline>
-						</command>
-						<command class_type='call' title='Check for OK' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<argument exp='&quot;OK&quot;' />
-							<argument exp='2' />
-							<argument exp='1' />
-							<argument exp='2750' />
-						</command>
-						<command class_type='call' title='Check for OK' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<argument exp='&quot;OK&quot;' />
-							<argument exp='2' />
-							<argument exp='1' />
-							<argument exp='2750' />
-						</command>
-						<command class_type='calculation' title='Add server port to command' cmdcolor='16760919' cmdcolor_sec='16760832' >
-							<exp exp='.Command = .Command + .TempStr' />
-							<exp exp='.Command = .Command + &quot;\r\n&quot;' />
-						</command>
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='FlushBuffer' />
-						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-							<argument exp='.Command' />
-						</command>
-						<command class_type='call' title='Check for OK' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<return exp='.Return' />
-							<argument exp='&quot;OK&quot;' />
-							<argument exp='2' />
-							<argument exp='1' />
-							<argument exp='2750' />
-						</command>
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='FlushBuffer' />
-					</flowline>
-				</macro>
-				<macro >
-					<flowline name='ESPConnectToSSID' description='Attempts to connect to the given SSID and Key values. 
-Returns 1 if the SSID has been connected.
-' >
-						<return name='Return' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
-						<param name='SSID' type='T8*' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-							<array size='20' />
-						</param>
-						<param name='Key' type='T8*' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-							<array size='20' />
-						</param>
-						<param name='Timeout' type='u8' description='Number of seconds to wait for the connection, default 2' isconst='0' isinit='0' usrinit='0' setinit='' />
-						<local name='Command' type='T8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-							<array size='50' />
-						</local>
-						<command class_type='call' title='Send Command - WIFI Mode STA' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-							<argument exp='&quot;AT+CWMODE=1\r\n&quot;' />
-						</command>
-						<command class_type='call' title='WaitForEcho' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<argument exp='&quot;\n&quot;' />
-							<argument exp='1' />
-							<argument exp='1' />
-							<argument exp='2750' />
-						</command>
-						<command class_type='call' title='WaitForEcho' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<argument exp='&quot;\n&quot;' />
-							<argument exp='1' />
-							<argument exp='1' />
-							<argument exp='2750' />
-						</command>
-						<command class_type='call' title='WaitForEcho' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<argument exp='&quot;\n&quot;' />
-							<argument exp='1' />
-							<argument exp='1' />
-							<argument exp='2750' />
-						</command>
-						<command class_type='call' title='Flush buffer' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='FlushBuffer' />
-						<command class_type='calculation' title='Assemble Join SSID Command' cmdcolor='16760919' cmdcolor_sec='16760832' >
-							<exp exp='.Command = &quot;AT+CWJAP=\&quot;&quot;' />
-							<exp exp='.Command = .Command + .SSID' />
-							<exp exp='.Command = .Command + &quot;\&quot;,\&quot;&quot;' />
-							<exp exp='.Command = .Command + .Key' />
-							<exp exp='.Command = .Command + &quot;\&quot;\r\n&quot;' />
-						</command>
-						<command class_type='call' title='Send Command' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-							<argument exp='.Command' />
-						</command>
-						<command class_type='delay' title='Wait for connection to be established' cmdcolor='12632064' cmdcolor_sec='16769676' exp='.Timeout' type='2' />
-						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<return exp='.Return' />
-							<argument exp='&quot;OK&quot;' />
-							<argument exp='2' />
-							<argument exp='1' />
-							<argument exp='2750' />
-						</command>
-					</flowline>
-				</macro>
-				<macro >
-					<flowline name='ESPInit' description='Initialise the device with the property data.
-Returns 1 if &quot;ready&quot; message successfully received 
-Returns 0 if no reply from module' >
-						<return name='Return' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
-						<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-							<exp exp='.Return = 255' />
-						</command>
-						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-							<argument exp='&quot;AT+RST\r\n&quot;' />
-						</command>
-						<command class_type='delay' title='Wait for reply' cmdcolor='12632064' cmdcolor_sec='16769676' exp='1' type='2' />
-						<command class_type='call' title='Check for startup &quot;ready&quot;' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-							<return exp='.Return' />
-							<argument exp='&quot;ready&quot;' />
-							<argument exp='5' />
-							<argument exp='1' />
-							<argument exp='2750' />
-						</command>
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='FlushBuffer' />
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.Return' swap='0' >
-							<flowline >
-								<command class_type='delay' title='Wait for reply' cmdcolor='12632064' cmdcolor_sec='16769676' exp='1' type='2' />
-								<command class_type='call' title='Start With Single Connection' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-									<argument exp='&quot;AT+CIPMUX=0\r\n&quot;' />
-								</command>
-								<command class_type='call' title='Check for startup &quot;ready&quot;' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-									<return exp='.Return' />
-									<argument exp='&quot;OK&quot;' />
-									<argument exp='2' />
-									<argument exp='1' />
-									<argument exp='2750' />
-								</command>
-								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='FlushBuffer' />
-							</flowline>
-							<flowline />
-						</command>
-					</flowline>
-				</macro>
-				<macro >
-					<flowline name='UART_Receive_Interrupt_Handler' description='' >
-						<return name='Return' type='v0' description='' isconst='0' isinit='0' usrinit='' setinit='' />
-						<local name='Data' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
-						<command class_type='call' title='Collect Byte From UART' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='ReceiveChar' >
-							<return exp='.Data' />
-							<argument exp='0' />
-						</command>
-						<command class_type='call' title='Store RX byte into buffer' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='PutByte' >
-							<argument exp='.Data' />
-						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.Data = &apos;+&apos;' swap='0' >
-							<flowline >
-								<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='MuxState = 1' />
-								</command>
-							</flowline>
-							<flowline >
-								<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='MuxState = 1' swap='0' >
-									<flowline >
-										<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.Data = &apos;I&apos;' swap='0' >
-											<flowline >
-												<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-													<exp exp='MuxState = 2' />
-												</command>
-											</flowline>
-											<flowline >
-												<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-													<exp exp='MuxState = 0' />
-												</command>
-											</flowline>
-										</command>
-									</flowline>
-									<flowline >
-										<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='MuxState = 2' swap='0' >
-											<flowline >
-												<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.Data = &apos;P&apos;' swap='0' >
-													<flowline >
-														<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-															<exp exp='MuxState = 3' />
-														</command>
-													</flowline>
-													<flowline >
-														<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-															<exp exp='MuxState = 0' />
-														</command>
-													</flowline>
-												</command>
-											</flowline>
-											<flowline >
-												<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='MuxState = 3' swap='0' >
-													<flowline >
-														<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.Data = &apos;D&apos;' swap='0' >
-															<flowline >
-																<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																	<exp exp='MuxState = 4' />
-																</command>
-															</flowline>
-															<flowline >
-																<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																	<exp exp='MuxState = 0' />
-																</command>
-															</flowline>
-														</command>
-													</flowline>
-													<flowline >
-														<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='MuxState = 4' swap='0' >
-															<flowline >
-																<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.Data = &apos;,&apos;' swap='0' >
-																	<flowline >
-																		<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																			<exp exp='MuxState = 5' />
-																		</command>
-																	</flowline>
-																	<flowline >
-																		<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																			<exp exp='MuxState = 0' />
-																		</command>
-																	</flowline>
-																</command>
-															</flowline>
-															<flowline >
-																<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='MuxState = 5' swap='0' >
-																	<flowline >
-																		<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																			<exp exp='WIFIMux = .Data' />
-																		</command>
-																		<command class_type='calculation' title='WIFI comms mode' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																			<exp exp='CommsMode = 2' />
-																		</command>
-																		<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																			<exp exp='MuxState = 0' />
-																		</command>
-																	</flowline>
-																	<flowline />
-																</command>
-															</flowline>
-														</command>
-													</flowline>
-												</command>
-											</flowline>
-										</command>
-									</flowline>
-								</command>
-							</flowline>
-						</command>
-					</flowline>
-				</macro>
-				<macro >
 					<flowline name='LEDBlink' description='' >
 						<return name='Return' type='v0' description='' isconst='0' isinit='0' usrinit='' setinit='' />
 						<command class_type='loop' title='Clock Speed Sanity Check Loop' cmdcolor='12615680' cmdcolor_sec='15376912' type='2' exp='5' >
 							<flowline >
-								<command class_type='native' title='LED On' ccode='LATBbits.LATB5 = 1;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
+								<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+									<exp exp='LEDBrightness = 20' />
+								</command>
 								<command class_type='delay' title='Delay' cmdcolor='12632064' cmdcolor_sec='16769676' exp='100' type='1' />
-								<command class_type='native' title='LED Off' ccode='LATBbits.LATB5 = 0;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
+								<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+									<exp exp='LEDBrightness = 1' />
+								</command>
 								<command class_type='delay' title='Delay' cmdcolor='12632064' cmdcolor_sec='16769676' exp='100' type='1' />
 							</flowline>
 						</command>
 					</flowline>
 				</macro>
 				<macro >
-					<flowline name='ESPStart' description='Attempts to connect to the specified network and start a server on the specified port.
-Stores result in WIFIConnected variable' >
+					<flowline name='tmrint' description='' >
 						<return name='Return' type='v0' description='' isconst='0' isinit='0' usrinit='' setinit='' />
-						<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-							<exp exp='WIFIConnected = 0' />
-							<exp exp='WIFIActive = 0' />
-						</command>
-						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='GetEEString' >
-							<return exp='SSID' />
-							<argument exp='0' />
-						</command>
-						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='GetEEString' >
-							<return exp='Pass' />
-							<argument exp='20' />
-						</command>
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Read' >
-							<return exp='WIFIPort' />
-							<argument exp='40' />
-						</command>
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Read' >
-							<return exp='Params[0]' />
-							<argument exp='41' />
-						</command>
-						<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-							<exp exp='WIFIPort = WIFIPort | (Params[0] &lt;&lt; 8)' />
-						</command>
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Length$ (SSID) &amp;&amp; Length$ (Pass)' swap='0' >
+						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='TimerCount = LEDBrightness' swap='0' >
 							<flowline >
-								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPInit' >
-									<return exp='WifiEn' />
-								</command>
-								<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='WifiEn' swap='0' >
+								<command class_type='native' title='LED Off' ccode='LATBbits.LATB5 = 0;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
+							</flowline>
+							<flowline >
+								<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='TimerCount = 0' swap='0' >
 									<flowline >
-										<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-											<exp exp='CommsMode = 2' />
-										</command>
-										<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='LEDBlink' />
-										<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPConnectToSSID' >
-											<return exp='WIFIConnected' />
-											<argument exp='SSID' />
-											<argument exp='Pass' />
-											<argument exp='5' />
-										</command>
-										<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='WIFIConnected' swap='0' >
+										<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='LEDBrightness &gt; 0' swap='0' >
 											<flowline >
-												<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='LEDBlink' />
-												<command class_type='call' title='Collect IP String' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPCheckTCPServerIP' >
-													<return exp='WIFIIP' />
-												</command>
-												<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='LEDBlink' />
-												<command class_type='call' title='Start TCP Server' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPControlTCPServer' >
-													<return exp='WIFIActive' />
-													<argument exp='1' />
-													<argument exp='WIFIPort' />
-												</command>
-												<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='LEDBlink' />
+												<command class_type='native' title='LED On' ccode='LATBbits.LATB5 = 1;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
 											</flowline>
 											<flowline />
 										</command>
@@ -2087,7 +1615,9 @@ Stores result in WIFIConnected variable' >
 									<flowline />
 								</command>
 							</flowline>
-							<flowline />
+						</command>
+						<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+							<exp exp='TimerCount = (TimerCount + 1) &amp; 63' />
 						</command>
 					</flowline>
 				</macro>
@@ -2096,254 +1626,147 @@ Stores result in WIFIConnected variable' >
 						<return name='Return' type='v0' description='' isconst='0' isinit='0' usrinit='' setinit='' />
 						<local name='in' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
 						<local name='out' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
-						<local name='str' type='T8' description='' isconst='0' isinit='0' usrinit='&quot;&quot;' setinit='' >
-							<array size='20' />
-						</local>
-						<local name='usbin' type='u16' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
+						<local name='NumBytes' type='u16' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
 						<command class_type='native' title='C Code' ccode='OSCCON = 0x70;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
 						<command class_type='calculation' title='Reset Mode to 0 - Waitinfg for command' cmdcolor='16760919' cmdcolor_sec='16760832' >
 							<exp exp='Mode = 0' />
 						</command>
-						<command class_type='calculation' title='Default to Bluetooth' cmdcolor='16760919' cmdcolor_sec='16760832' >
-							<exp exp='CommsMode = 1' />
-						</command>
 						<command class_type='native' title='Init LED tris' ccode='TRISBbits.TRISB5 = 0;
 LATBbits.LATB5 = 0;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
-						<command class_type='interrupt' title='Interrupt' cmdcolor='17151' cmdcolor_sec='355583' enable='1' name='RXINT0' call='UART_Receive_Interrupt_Handler' >
-							<settings timer='0' prescale='-1' postscale='-1' rollover='-1' bitcount='-1' trigger='3' maskhi='--------------------------------------------------------------------------------------------------------------------------------------------------------------------------8' masklo='--------------------------------------------------------------------------------------------------------------------------------------------------------------------------8' >
+						<command class_type='interrupt' title='Interrupt' cmdcolor='17151' cmdcolor_sec='355583' enable='1' name='TMR0' call='tmrint' >
+							<settings timer='1' prescale='8' postscale='-1' rollover='-1' bitcount='-1' trigger='3' maskhi='--------------------------------------------------------------------------------------------------------------------------------------------------------------------------8' masklo='--------------------------------------------------------------------------------------------------------------------------------------------------------------------------8' >
+								<option value='1' />
 								<option value='0' />
-								<option value='0' />
-								<option value='0' />
-								<option value='0' />
-								<option value='0' />
-								<option value='0' />
-								<option value='0' />
-								<option value='0' />
+								<option value='3' />
+								<option value='-1' />
+								<option value='-1' />
+								<option value='-1' />
+								<option value='-1' />
+								<option value='-1' />
 							</settings>
 						</command>
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='Initialise' />
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Read' >
-							<return exp='CommsBAUD' />
-							<argument exp='42' />
-						</command>
-						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ESPStart' />
-						<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='WIFIActive' swap='0' >
-							<flowline >
-								<command class_type='comment' title='' comment='How to enable USB comms when WIFI is connected?' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-							</flowline>
-							<flowline >
-								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='USB_Serial1' macro='Initialise' >
-									<return exp='USBActive' />
-								</command>
-							</flowline>
-						</command>
+						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='LEDBlink' />
+						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='InitESP' />
 						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='LEDBlink' />
 						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='Servo_Controller1' macro='Initialise' />
+						<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+							<exp exp='TimerCount = 1' />
+						</command>
 						<command class_type='loop' title='Loop' cmdcolor='12615680' cmdcolor_sec='15376912' type='0' exp='1' >
 							<flowline >
-								<command class_type='decision' title='This doesn&apos;t wpork -- always 0 even after USB init' cmdcolor='12615680' cmdcolor_sec='15376912' exp='USBActive' swap='0' >
-									<flowline />
-									<flowline />
+								<command class_type='comment' title='' comment='Poll for data' textarea='36,3,36,3' cmdcolor='10944511' cmdcolor_sec='11465458' />
+								<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='GetRxArray' >
+									<return exp='.NumBytes' />
+									<argument exp='CmdData' />
+									<argument exp='5' />
 								</command>
-								<command class_type='comment' title='' comment='Poll for USB data' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-									<exp exp='.usbin = 0' />
-								</command>
-								<command class_type='loop' title='Loop' cmdcolor='12615680' cmdcolor_sec='15376912' type='0' exp='.usbin &lt; 256' >
+								<command class_type='decision' title='Decision' textarea='36,3,36,3' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.NumBytes' swap='0' >
 									<flowline >
-										<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='USB_Serial1' macro='ReadByte' >
-											<return exp='.usbin' />
-											<argument exp='0' />
+										<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+											<exp exp='LEDBrightness = 31' />
 										</command>
-										<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.usbin &lt; 256' swap='0' >
+										<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+											<exp exp='Idx = 0' />
+										</command>
+										<command class_type='loop' title='Loop' textarea='36,3,36,3' cmdcolor='12615680' cmdcolor_sec='15376912' type='0' exp='Idx &lt; .NumBytes' >
 											<flowline >
-												<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='PutByte' >
-													<argument exp='.usbin' />
-												</command>
 												<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-													<exp exp='CommsMode = 0' />
+													<exp exp='.in = CmdData[Idx]' />
 												</command>
-											</flowline>
-											<flowline />
-										</command>
-									</flowline>
-								</command>
-								<command class_type='comment' title='' comment='Work through contents of buffer' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-								<command class_type='decision' title='Data from host in the buffer?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='CommandBuffer :: GetNumberBytes () &gt; 0' swap='0' >
-									<flowline >
-										<command class_type='native' title='LED On' ccode='LATBbits.LATB5 = 1;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
-										<command class_type='call' title='Collect byte from buffer' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='GetByte' >
-											<return exp='.in' />
-										</command>
-										<command class_type='calculation' title='Default reply is to echo incoming byte' cmdcolor='16760919' cmdcolor_sec='16760832' >
-											<exp exp='.out = .in' />
-										</command>
-										<command class_type='switch' title='Finite State Machine - Mode' textarea='36,25,36,25' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Mode' >
-											<case >
-												<flowline >
-													<command class_type='comment' title='' comment='Default - Wait for command code' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='11465458' />
-													<command class_type='decision' title='Is Command Byte?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.in &amp; 0x80' swap='0' >
+												<command class_type='calculation' title='Default reply is to echo incoming byte' cmdcolor='16760919' cmdcolor_sec='16760832' >
+													<exp exp='.out = .in' />
+												</command>
+												<command class_type='switch' title='Finite State Machine - Mode' textarea='36,25,36,25' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Mode' >
+													<case >
 														<flowline >
-															<command class_type='calculation' title='Assign Command Code' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																<exp exp='Command = .in' />
-															</command>
-															<command class_type='call' title='Check for a command match' cmdcolor='1879295' cmdcolor_sec='5751039' macro='MatchCommand' />
-														</flowline>
-														<flowline />
-													</command>
-												</flowline>
-											</case>
-											<case exp='1' >
-												<flowline >
-													<command class_type='comment' title='' comment='Collect Parameters' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='11465458' />
-													<command class_type='calculation' title='Store Parameter' cmdcolor='16760919' cmdcolor_sec='16760832' >
-														<exp exp='Params[ParamIdx] = .in' />
-													</command>
-													<command class_type='calculation' title='Increment Parameter Index' cmdcolor='16760919' cmdcolor_sec='16760832' >
-														<exp exp='ParamIdx = ParamIdx + 1' />
-													</command>
-													<command class_type='decision' title='String Parameter?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='ParamCount = 255' swap='0' >
-														<flowline >
-															<command class_type='decision' title='End of string?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.in = 0' swap='0' >
+															<command class_type='comment' title='' comment='Default - Wait for command code' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='11465458' />
+															<command class_type='decision' title='Is Command Byte?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.in &amp; 0x80' swap='0' >
 																<flowline >
-																	<command class_type='calculation' title='Modify Param Count to match length of string' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																		<exp exp='ParamCount = ParamIdx' />
+																	<command class_type='calculation' title='Assign Command Code' cmdcolor='16760919' cmdcolor_sec='16760832' >
+																		<exp exp='Command = .in' />
+																	</command>
+																	<command class_type='call' title='Check for a command match' cmdcolor='1879295' cmdcolor_sec='5751039' macro='MatchCommand' />
+																</flowline>
+																<flowline />
+															</command>
+														</flowline>
+													</case>
+													<case exp='1' >
+														<flowline >
+															<command class_type='comment' title='' comment='Collect Parameters' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='11465458' />
+															<command class_type='calculation' title='Store Parameter' cmdcolor='16760919' cmdcolor_sec='16760832' >
+																<exp exp='Params[ParamIdx] = .in' />
+															</command>
+															<command class_type='calculation' title='Increment Parameter Index' cmdcolor='16760919' cmdcolor_sec='16760832' >
+																<exp exp='ParamIdx = ParamIdx + 1' />
+															</command>
+															<command class_type='decision' title='String Parameter?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='ParamCount = 255' swap='0' >
+																<flowline >
+																	<command class_type='decision' title='End of string?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='.in = 0' swap='0' >
+																		<flowline >
+																			<command class_type='calculation' title='Modify Param Count to match length of string' cmdcolor='16760919' cmdcolor_sec='16760832' >
+																				<exp exp='ParamCount = ParamIdx' />
+																			</command>
+																		</flowline>
+																		<flowline />
+																	</command>
+																</flowline>
+																<flowline />
+															</command>
+															<command class_type='decision' title='End of params?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='ParamCount = ParamIdx' swap='0' >
+																<flowline >
+																	<command class_type='comment' title='' comment='All Parameters collected
+Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='11465458' />
+																	<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ActionCommand' />
+																</flowline>
+																<flowline />
+															</command>
+														</flowline>
+													</case>
+													<case exp='2' >
+														<flowline >
+															<command class_type='comment' title='' comment='Send Return Values' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='11465458' />
+															<command class_type='calculation' title='Assign return value' cmdcolor='16760919' cmdcolor_sec='16760832' >
+																<exp exp='.out = Returns[ReturnIdx]' />
+															</command>
+															<command class_type='calculation' title='Increment bytes to end command' cmdcolor='16760919' cmdcolor_sec='16760832' >
+																<exp exp='ReturnIdx = ReturnIdx + 1' />
+															</command>
+															<command class_type='decision' title='End of command?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='ReturnCount = ReturnIdx' swap='0' >
+																<flowline >
+																	<command class_type='calculation' title='Reset Mode' cmdcolor='16760919' cmdcolor_sec='16760832' >
+																		<exp exp='Mode = 0' />
 																	</command>
 																</flowline>
 																<flowline />
 															</command>
 														</flowline>
-														<flowline />
-													</command>
-													<command class_type='decision' title='End of params?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='ParamCount = ParamIdx' swap='0' >
-														<flowline >
-															<command class_type='comment' title='' comment='All Parameters collected
-Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='11465458' />
-															<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ActionCommand' />
-														</flowline>
-														<flowline />
-													</command>
-												</flowline>
-											</case>
-											<case exp='2' >
-												<flowline >
-													<command class_type='comment' title='' comment='Send Return Values' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='11465458' />
-													<command class_type='calculation' title='Assign return value' cmdcolor='16760919' cmdcolor_sec='16760832' >
-														<exp exp='.out = Returns[ReturnIdx]' />
-													</command>
-													<command class_type='calculation' title='Increment bytes to end command' cmdcolor='16760919' cmdcolor_sec='16760832' >
-														<exp exp='ReturnIdx = ReturnIdx + 1' />
-													</command>
-													<command class_type='decision' title='End of command?' cmdcolor='12615680' cmdcolor_sec='15376912' exp='ReturnCount = ReturnIdx' swap='0' >
-														<flowline >
-															<command class_type='calculation' title='Reset Mode' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																<exp exp='Mode = 0' />
-															</command>
-														</flowline>
-														<flowline />
-													</command>
-												</flowline>
-											</case>
-										</command>
-										<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='CommsMode' swap='0' >
-											<flowline >
-												<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='CommsMode = 2' swap='0' >
-													<flowline >
-														<command class_type='comment' title='' comment='WIFI Reply' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-														<command class_type='call' title='Transmit reply byte' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-															<argument exp='&quot;AT+CIPSEND=&quot;' />
-														</command>
-														<command class_type='call' title='Transmit mux channel' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendChar' >
-															<argument exp='WIFIMux' />
-														</command>
-														<command class_type='call' title='Transmit comma' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendChar' >
-															<argument exp='&apos;,&apos;' />
-														</command>
-														<command class_type='calculation' title='Convert Number of bytes to a string' cmdcolor='16760919' cmdcolor_sec='16760832' >
-															<exp exp='.str = ToString$ (ReturnCount)' />
-														</command>
-														<command class_type='call' title='Transmit reply string' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-															<argument exp='.str' />
-														</command>
-														<command class_type='call' title='Terminate command' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendString' >
-															<argument exp='&quot;\r\n&quot;' />
-														</command>
-														<command class_type='call' title='Check for reply - command echo' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-															<return exp='Params[0]' />
-															<argument exp='&quot;\n&quot;' />
-															<argument exp='1' />
-															<argument exp='1' />
-															<argument exp='2750' />
-														</command>
-														<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Params[0]' swap='0' >
-															<flowline >
-																<command class_type='call' title='Ready to send?' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-																	<return exp='Params[0]' />
-																	<argument exp='&quot;&gt; &quot;' />
-																	<argument exp='2' />
-																	<argument exp='1' />
-																	<argument exp='2750' />
-																</command>
-																<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='Params[0]' swap='0' >
-																	<flowline >
-																		<command class_type='call' title='Flush rx buffer' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='FlushBuffer' />
-																		<command class_type='calculation' title='Increment bytes to end command' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																			<exp exp='ReturnIdx = 0' />
-																		</command>
-																		<command class_type='loop' title='Loop' cmdcolor='12615680' cmdcolor_sec='15376912' type='0' exp='ReturnIdx &lt; ReturnCount' >
-																			<flowline >
-																				<command class_type='call' title='Transmit reply byte' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendChar' >
-																					<argument exp='Returns[ReturnIdx]' />
-																				</command>
-																				<command class_type='calculation' title='Increment bytes to end command' cmdcolor='16760919' cmdcolor_sec='16760832' >
-																					<exp exp='ReturnIdx = ReturnIdx + 1' />
-																				</command>
-																			</flowline>
-																		</command>
-																		<command class_type='call' title='Check for reply' cmdcolor='1879295' cmdcolor_sec='5751039' component='CommandBuffer' macro='WaitForValue' >
-																			<argument exp='&quot;SEND OK\r\n&quot;' />
-																			<argument exp='10' />
-																			<argument exp='1' />
-																			<argument exp='2750' />
-																		</command>
-																	</flowline>
-																	<flowline />
-																</command>
-															</flowline>
-															<flowline />
-														</command>
-														<command class_type='calculation' title='Reset Mode' cmdcolor='16760919' cmdcolor_sec='16760832' >
-															<exp exp='Mode = 0' />
-														</command>
-													</flowline>
-													<flowline >
-														<command class_type='comment' title='' comment='Bluetooth Reply' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-														<command class_type='call' title='Transmit reply byte' cmdcolor='1879295' cmdcolor_sec='5751039' component='UART1' macro='SendChar' >
-															<argument exp='.out' />
-														</command>
-													</flowline>
+													</case>
 												</command>
-											</flowline>
-											<flowline >
-												<command class_type='comment' title='' comment='USB Reply' textarea='12,0,12,0' cmdcolor='10944511' cmdcolor_sec='11465458' />
-												<command class_type='call' title='Transmit reply byte' cmdcolor='1879295' cmdcolor_sec='5751039' component='USB_Serial1' macro='SendByte' >
-													<argument exp='.out' />
+												<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+													<exp exp='CmdData[Idx] = .out' />
+												</command>
+												<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+													<exp exp='Idx = Idx + 1' />
 												</command>
 											</flowline>
 										</command>
-										<command class_type='native' title='LED Off' ccode='LATBbits.LATB5 = 0;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
+										<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='WLAN_ESP8266' macro='ClientSendArray' >
+											<argument exp='CmdData' />
+											<argument exp='.NumBytes' />
+										</command>
+										<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+											<exp exp='LEDBrightness = 5' />
+										</command>
 									</flowline>
 									<flowline >
-										<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
-											<exp exp='count = count + 1' />
-										</command>
-										<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='count = 0' swap='0' >
+										<command class_type='decision' title='Decision' cmdcolor='12615680' cmdcolor_sec='15376912' exp='LEDBrightness &gt; 1' swap='0' >
 											<flowline >
-												<command class_type='native' title='LED On' ccode='LATBbits.LATB5 = 1;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
+												<command class_type='calculation' title='Calculation' cmdcolor='16760919' cmdcolor_sec='16760832' >
+													<exp exp='LEDBrightness = LEDBrightness - 1' />
+												</command>
 											</flowline>
-											<flowline >
-												<command class_type='native' title='LED Off' ccode='LATBbits.LATB5 = 0;' cmdcolor='7687168' cmdcolor_sec='8152576' language='C' />
-											</flowline>
+											<flowline />
 										</command>
 									</flowline>
 								</command>
@@ -2374,14 +1797,14 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 								</command>
 							</flowline>
 						</command>
-						<command class_type='call' title='Call Component Macro' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Write' >
+						<command class_type='call' title='Terminate String' cmdcolor='1879295' cmdcolor_sec='5751039' component='eeprom1' macro='Write' >
+							<argument exp='.Location + .idx' />
 							<argument exp='0' />
-							<argument exp='.Str[.idx]' />
 						</command>
 					</flowline>
 				</macro>
 			</macros>
-			<component class_type='ref' guid='d92e8259-f3a8-4176-a8c4-fe7ca42b2c3f' vmin='1' vmaj='1' codename='LED' x='-60' y='70' z='-1.90735e-07' xsz='1' ysz='1' zsz='1' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
+			<component class_type='ref' guid='d92e8259-f3a8-4176-a8c4-fe7ca42b2c3f' vmin='1' vmaj='1' codename='LED' x='-52' y='70' z='-1.90735e-07' xsz='1' ysz='1' zsz='1' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
 				<resources />
 				<properties />
 				<values >
@@ -2401,74 +1824,13 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<variables />
 				<macros />
 			</component>
-			<component class_type='ref' guid='c73616d1-7ad0-45d9-aada-69ccfa4c5efc' vmin='0' vmaj='2' codename='UART1' x='0' y='-40' z='3.74999' xsz='66' ysz='34' zsz='7.5' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
-				<resources />
-				<properties />
-				<values >
-					<value target='cal_uart::CHANNEL' data='001' />
-					<value target='cal_uart::BAUD_LIST' data='009' />
-					<value target='cal_uart::BAUD' data='115200' />
-					<value target='cal_uart::DBITS' data='008' />
-					<value target='cal_uart::RETURN' data='000' />
-					<value target='cal_uart::ECHO' data='000' />
-					<value target='cal_uart::UseTX' data='1' />
-					<value target='cal_uart::TX' data='$PORTC.6' />
-					<value target='cal_uart::OutputPins' data='006' />
-					<value target='cal_uart::TXAlt' data='0' />
-					<value target='cal_uart::UseRX' data='1' />
-					<value target='cal_uart::RX' data='$PORTC.7' />
-					<value target='cal_uart::InputPins' data='039' />
-					<value target='cal_uart::RXAlt' data='0' />
-					<value target='cal_uart::FLOWEN' data='000' />
-					<value target='cal_uart::RTS' data='$PORTB.2' />
-					<value target='cal_uart::CTS' data='$PORTB.1' />
-					<value target='label' data='UART' />
-					<value target='cal_uart::ScopeTraces' data='0' />
-					<value target='cal_uart::ConsoleData' data='0' />
-					<value target='cal_uart::ConsoleColumns' data='64' />
-					<value target='cal_uart::DataSource' data='000' />
-					<value target='cal_uart::com_port' data='000' />
-					<value target='cal_uart::Injector' data='000' />
-				</values>
-				<events />
-				<apis />
-				<variables />
-				<macros />
-			</component>
-			<component class_type='ref' guid='3e28ac22-2855-410a-9660-0b0a4731e545' vmin='6' vmaj='1' codename='USB_Serial1' x='-80' y='40' z='3.74999' xsz='66' ysz='34' zsz='7.5' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
-				<resources />
-				<properties />
-				<values >
-					<value target='vendor_ID' data='4799' />
-					<value target='product_ID' data='61456' />
-					<value target='dev_name' data='Interface Board' />
-					<value target='dev_manufacturer' data='Rowland Technology' />
-					<value target='major_version' data='1' />
-					<value target='minor_version' data='0' />
-					<value target='RETURN' data='001' />
-					<value target='enumeration_tout' data='1' />
-					<value target='timeout' data='10' />
-					<value target='usb_type' data='6' />
-					<value target='TXBUFSZ' data='64' />
-					<value target='RXBUFSZ' data='64' />
-					<value target='driver_directory' data='$(srcdir)' />
-					<value target='driver_filename' data='Flowcode_USB_Serial_Driver' />
-					<value target='gen_driver' data='' />
-					<value target='COM_port' data='001' />
-					<value target='label' data='USB Serial' />
-				</values>
-				<events />
-				<apis />
-				<variables />
-				<macros />
-			</component>
 			<component class_type='ref' guid='24219805-113d-4b12-b6bd-e1b0b0c33981' vmin='4' vmaj='1' codename='I2C_Master1' x='0' y='40' z='3.74999' xsz='66' ysz='34' zsz='7.5' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
 				<resources />
 				<properties />
 				<values >
 					<value target='cal_i2c::CHANNEL' data='000' />
-					<value target='cal_i2c::BAUD_LIST' data='003' />
-					<value target='cal_i2c::BAUD' data='1000000' />
+					<value target='cal_i2c::BAUD_LIST' data='001' />
+					<value target='cal_i2c::BAUD' data='100000' />
 					<value target='cal_i2c::StopDel' data='0' />
 					<value target='cal_i2c::SRC' data='000' />
 					<value target='cal_i2c::SMB' data='000' />
@@ -2487,7 +1849,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<variables />
 				<macros />
 			</component>
-			<component class_type='ref' guid='9202a62e-0a42-4780-adce-16b701e5ec53' vmin='0' vmaj='2' codename='Servo_Controller1' x='70' y='30' z='6' xsz='1' ysz='1' zsz='1' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
+			<component class_type='ref' guid='9202a62e-0a42-4780-adce-16b701e5ec53' vmin='0' vmaj='2' codename='Servo_Controller1' x='92.7' y='51.3' z='6' xsz='1' ysz='1' zsz='1' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
 				<resources />
 				<properties />
 				<values >
@@ -2501,6 +1863,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 					<value target='pin6' data='$PORTB.7' />
 					<value target='pin7' data='$PORTB.7' />
 					<value target='Peripherals' data='PWM0 + PWM1 + Timer1' />
+					<value target='TrimMode' data='001' />
 					<value target='trim0' data='000' />
 					<value target='trim1' data='0' />
 					<value target='trim2' data='0' />
@@ -2510,17 +1873,17 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 					<value target='trim6' data='000' />
 					<value target='trim7' data='0' />
 					<value target='min_pulse_width' data='1000' />
-					<value target='max_pulse_width' data='2000' />
-					<value target='CCPLo' data='204' />
-					<value target='CCPHi' data='93' />
+					<value target='max_pulse_width' data='2500' />
+					<value target='CCPLo' data='48' />
+					<value target='CCPHi' data='117' />
 					<value target='Servo_Clock_Count_25' data='300' />
 					<value target='Servo_Clock_Count_1280' data='12003' />
-					<value target='Servo_Clock_Count_2500' data='24012' />
-					<value target='Servo_Period_Multiplier' data='46' />
-					<value target='IntRange' data='0 - 11775' />
+					<value target='Servo_Clock_Count_2500' data='30000' />
+					<value target='Servo_Period_Multiplier' data='70' />
+					<value target='IntRange' data='0 - 17919' />
 					<value target='Divider' data='0' />
-					<value target='RoundUp' data='1' />
-					<value target='IntScaler' data='0.183246' />
+					<value target='RoundUp' data='0' />
+					<value target='IntScaler' data='0.274617' />
 					<value target='sim0' data='' />
 					<value target='sim1' data='' />
 					<value target='sim2' data='' />
@@ -2591,7 +1954,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<variables />
 				<macros />
 			</component>
-			<component class_type='ref' guid='dcbf571f-a6fa-402d-bdd4-be00cca4070f' vmin='1' vmaj='1' codename='eeprom1' x='70' y='50' z='10' xsz='20' ysz='20' zsz='20' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
+			<component class_type='ref' guid='dcbf571f-a6fa-402d-bdd4-be00cca4070f' vmin='1' vmaj='1' codename='eeprom1' x='-25.1' y='1.2' z='10' xsz='20' ysz='20' zsz='20' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
 				<resources />
 				<properties />
 				<values >
@@ -2606,7 +1969,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<variables />
 				<macros />
 			</component>
-			<component class_type='ref' guid='09222494-fbef-455b-9651-9e9e46592eb5' vmin='0' vmaj='2' codename='DAC_Output1' x='-130' y='0' z='2.25004' xsz='14.5' ysz='64' zsz='4.50008' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
+			<component class_type='ref' guid='09222494-fbef-455b-9651-9e9e46592eb5' vmin='0' vmaj='2' codename='DAC_Output1' x='-53.226' y='0' z='4.20516' xsz='1' ysz='1.36073' zsz='0.927128' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
 				<resources />
 				<properties />
 				<values >
@@ -2629,7 +1992,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<variables />
 				<macros />
 			</component>
-			<component class_type='ref' guid='c67171df-0ad6-4b11-8361-cfe14b072847' vmin='0' vmaj='2' codename='cal_spi1' x='0' y='0' z='0' xsz='25' ysz='25' zsz='25' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
+			<component class_type='ref' guid='c67171df-0ad6-4b11-8361-cfe14b072847' vmin='1' vmaj='2' codename='cal_spi1' x='0' y='0' z='0' xsz='25' ysz='25' zsz='25' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
 				<resources />
 				<properties />
 				<values >
@@ -2701,22 +2064,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<variables />
 				<macros />
 			</component>
-			<component class_type='ref' guid='c34f9b8a-a915-4f75-ad0c-87f2ad670a8a' vmin='5' vmaj='1' codename='CommandBuffer' x='-160' y='0' z='0.8' xsz='20' ysz='20' zsz='20' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
-				<resources />
-				<properties />
-				<values >
-					<value target='BufferSize' data='128' />
-					<value target='StorageType' data='000' />
-					<value target='MemType' data='000' />
-					<value target='RETURN' data='000' />
-					<value target='Console' data='1' />
-				</values>
-				<events />
-				<apis />
-				<variables />
-				<macros />
-			</component>
-			<component class_type='ref' guid='1a8c2bb7-8bed-4a1c-9186-ba24688c8840' vmin='3' vmaj='1' codename='slider_plastic1' x='-210' y='0' z='5' xsz='12.502' ysz='112.5' zsz='10' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
+			<component class_type='ref' guid='1a8c2bb7-8bed-4a1c-9186-ba24688c8840' vmin='3' vmaj='1' codename='slider_plastic1' x='-84.2' y='0' z='5' xsz='1' ysz='1' zsz='10' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
 				<resources />
 				<properties />
 				<values >
@@ -2737,7 +2085,7 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<variables />
 				<macros />
 			</component>
-			<component class_type='ref' guid='3e5cc6d0-3e36-46b8-bc40-f238a5735b6e' vmin='0' vmaj='1' codename='IntOscHelper1' x='0' y='0' z='0' xsz='25' ysz='25' zsz='25' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
+			<component class_type='ref' guid='3e5cc6d0-3e36-46b8-bc40-f238a5735b6e' vmin='0' vmaj='1' codename='IntOscHelper1' x='0' y='0' z='0' xsz='1' ysz='1' zsz='25' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='0' >
 				<resources />
 				<properties />
 				<values >
@@ -2752,13 +2100,102 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 				<variables />
 				<macros />
 			</component>
+			<component class_type='ref' guid='e1bb4679-58ef-40dc-8d09-306ada46f7bf' vmin='1' vmaj='2' codename='WLAN_ESP8266' x='0.4' y='-40.8' z='0' xsz='1' ysz='1' zsz='1' xang='0' yang='0' zang='0' xquat='0' yquat='0' zquat='0' wquat='1' visible='1' scadavisible='1' interactive='1' solid='1' layer='1' poslock='1' >
+				<resources />
+				<properties />
+				<values >
+					<value target='RxBufferSize' data='400' />
+					<value target='ScanBufferSize' data='180' />
+					<value target='ResetMode' data='000' />
+					<value target='Termination' data='001' />
+					<value target='cal_uart1::CHANNEL' data='001' />
+					<value target='cal_uart1::BAUD_LIST' data='009' />
+					<value target='cal_uart1::BAUD' data='115200' />
+					<value target='cal_uart1::TX' data='$PORTC.6' />
+					<value target='cal_uart1::OutputPins' data='000' />
+					<value target='cal_uart1::TXAlt' data='0' />
+					<value target='cal_uart1::RX' data='$PORTC.7' />
+					<value target='cal_uart1::InputPins' data='085' />
+					<value target='cal_uart1::RXAlt' data='0' />
+					<value target='RESET' data='$PORTC.1' />
+					<value target='cal_uart1::FLOWEN' data='000' />
+					<value target='cal_uart1::RTS' data='$PORTC.4' />
+					<value target='cal_uart1::CTS' data='$PORTC.5' />
+					<value target='UARTidx' data='001' />
+					<value target='PAGES' data='002' />
+					<value target='TIMEOUT' data='4' />
+					<value target='LineDelay' data='100' />
+					<value target='name1' data='index.htm' />
+					<value target='html1' data='&lt;html&gt;
+Rowland Technology Interface Board - Network Config Page
+ &lt;form action=&quot;page2.htm&quot;&gt;
+    &lt;label for=&quot;0&quot;&gt;SSID&lt;/label&gt;
+    &lt;input type=&quot;text&quot; placeholder=&quot;Enter SSID&quot; name=&quot;0&quot; required&gt;&lt;br /&gt;
+    &lt;label for=&quot;1&quot;&gt;&lt;b&gt;Password&lt;/b&gt;&lt;/label&gt;
+    &lt;input type=&quot;password&quot; placeholder=&quot;Enter Password&quot; name=&quot;1&quot; required&gt;&lt;br /&gt;
+    &lt;button type=&quot;submit&quot; class=&quot;registerbtn&quot;&gt;Register&lt;/button&gt;
+&lt;/form&gt; 
+&lt;/html&gt;' />
+					<value target='name2' data='page2.htm' />
+					<value target='html2' data='&lt;html&gt;
+SSID and Password collected.&lt;br /&gt;Connecting to SSID.
+&lt;/html&gt;' />
+					<value target='name3' data='page3.htm' />
+					<value target='html3' data='&lt;html&gt;
+Page 3
+&lt;/html&gt;' />
+					<value target='name4' data='page4.htm' />
+					<value target='html4' data='&lt;html&gt;
+Page 4
+&lt;/html&gt;' />
+					<value target='WLAN_USE_PAGE1' data='1' />
+					<value target='WLAN_USE_PAGE2' data='1' />
+					<value target='WLAN_USE_PAGE3' data='0' />
+					<value target='WLAN_USE_PAGE4' data='0' />
+					<value target='Outgoing_Count' data='000' />
+					<value target='Out_Len_0' data='20' />
+					<value target='Out_Len_1' data='20' />
+					<value target='Out_Len_2' data='20' />
+					<value target='Out_Len_3' data='20' />
+					<value target='Out_Len_4' data='20' />
+					<value target='Out_Len_5' data='20' />
+					<value target='Out_Len_6' data='20' />
+					<value target='Out_Len_7' data='20' />
+					<value target='Out_Len_8' data='20' />
+					<value target='Out_Len_9' data='20' />
+					<value target='Out_Len_10' data='20' />
+					<value target='Out_Len_11' data='20' />
+					<value target='Incoming_Count' data='002' />
+					<value target='In_Len_0' data='35' />
+					<value target='In_Len_1' data='35' />
+					<value target='In_Len_2' data='20' />
+					<value target='In_Len_3' data='20' />
+					<value target='In_Len_4' data='20' />
+					<value target='In_Len_5' data='20' />
+					<value target='label' data='WLAN ESP8266' />
+					<value target='SimMethod' data='000' />
+					<value target='cal_uart1::ScopeTraces' data='0' />
+					<value target='cal_uart1::ConsoleData' data='0' />
+					<value target='cal_uart1::ConsoleColumns' data='64' />
+					<value target='cal_uart1::DataSource' data='000' />
+					<value target='cal_uart1::com_port' data='001' />
+					<value target='cal_uart1::Injector' data='000' />
+					<value target='MIAC' data='0' />
+					<value target='RFPOWER' data='' />
+					<value target='RemapIndex' data='20' />
+				</values>
+				<events />
+				<apis />
+				<variables />
+				<macros />
+			</component>
 		</component>
 	</components>
 	<scadaresourcelookup />
 	<keymap />
 	<panel2d shadows='0' lighting='2' brightness='0' >
 		<background rgb='7292207' img='' style='0' />
-		<camera xe='-59.4759' ye='12.46' ze='476.907' xt='-59.4759' yt='12.46' zt='0' xquat='0' yquat='0' zquat='0' wquat='1' />
+		<camera xe='16.3714' ye='14.3941' ze='408.646' xt='16.3714' yt='14.3941' zt='0' xquat='0' yquat='0' zquat='0' wquat='1' />
 	</panel2d>
 	<panel3d shadows='0' lighting='2' brightness='0' perspective='1' >
 		<background rgb='8409120' img='' style='0' />
@@ -2773,18 +2210,14 @@ Action Command' textarea='36,-6,36,-6' cmdcolor='10944511' cmdcolor_sec='1146545
 		<camerakey6 xe='-173.205' ye='-173.205' ze='173.205' xt='0' yt='0' zt='0' xquat='-0.424708' yquat='0.17592' zquat='0.339851' wquat='0.820473' />
 	</panel3d>
 	<layout >
-		<view type='0' name='StoreEEString' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ActionCommand' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='80' scrollx='0' scrolly='12424' flags='0' />
-		<view type='0' name='MatchCommand' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='Main' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='80' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='LEDBlink' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPStart' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='UART_Receive_Interrupt_Handler' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPInit' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='GetEEString' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPControlTCPServer' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPCheckTCPServerIP' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ESPConnectToSSID' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAABwUAAFEFAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='Main' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA9wcAAH4HAAA' zoom='80' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='MatchCommand' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA9wcAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='InitESP' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA9wcAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='LEDBlink' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA9wcAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='GetEEString' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA9wcAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='StoreEEString' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA9wcAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='tmrint' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA9wcAAH4HAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ActionCommand' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAA9wcAAH4HAAA' zoom='80' scrollx='0' scrolly='0' flags='0' />
 	</layout>
 </document>
 </root>
