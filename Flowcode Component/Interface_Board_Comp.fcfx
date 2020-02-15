@@ -1,11 +1,12 @@
 <root>
-<document scada='0' schema='102' license='1,Dev User,H1YQFU' title='' description='' fcversion='524544' target='ARD.ATMEGA.Arduino Uno R3 PDIP' >
-	<config data='' clkspd='16000000' simspd='1' usewdt='0' constif='0' />
+<document scada='0' schema='102' license='1,Dev User,H1YQFU' title='' description='' fcversion='524800' target='ARD.ATMEGA.Arduino Uno R3 PDIP' >
+	<config data='' clkspd='16000000' simspd='1' usewdt='0' constif='0' Use3V3='0' />
 	<plugins >
 		<dll_models enabled='1' />
 	</plugins>
 	<supplement use='0' head='' body='' />
 	<debug />
+	<traces />
 	<ghost >
 		<FK2 >
 			<data name='FK2D0' port='4294967295' pin='4294967295' />
@@ -45,6 +46,8 @@
 			<data name='CommsDelayOverridden' value='0' />
 			<data name='CommsDelay' value='11' />
 			<data name='CalculatedCommsDelay' value='11' />
+			<data name='AnalogEB2PrescaleValue' value='2' />
+			<data name='DigitalEB2SampleRate' value='100000' />
 		</ICD>
 		<pins >
 			<digital A='0' B='0' C='0' D='0' E='0' F='0' G='0' H='0' I='0' J='0' K='0' L='0' M='0' N='0' O='0' P='0' Q='0' R='0' S='0' T='0' U='0' V='0' W='0' X='0' Y='0' Z='0' />
@@ -66,7 +69,8 @@ See Instructables for open source project files.' category='SCADA Slaves' catena
 001WIFI' />
 				<property name='Connection Properties' folder='property_1' hidden='0' >
 					<property name='Refresh Ports' target='scada_uart1::RefreshPorts' typeid='7' hidden='0' locked='0' info='' />
-					<property name='COM Port' target='scada_uart1::com_port' typeid='16' hidden='0' locked='0' info='Lists all the current available COM port hardware on your PC.' filter='001COM1' />
+					<property name='COM Port' target='scada_uart1::com_port' typeid='16' hidden='0' locked='0' info='Lists all the current available COM port hardware on your PC.' filter='001COM1
+003COM3' />
 				</property>
 				<property name='Connection Properties' folder='property_2' hidden='1' >
 					<property name='Network Interface' target='NetworkComms1::NetworkInterface' typeid='16' hidden='0' locked='0' info='Some computers may have several network interfaces such as ethernet ports and wifi access.
@@ -87,12 +91,12 @@ Command Log gives a more in depth analysis of the outgoing commands and incoming
 			<values >
 				<value target='ConnType' data='000' />
 				<value target='scada_uart1::RefreshPorts' data='0' />
-				<value target='scada_uart1::com_port' data='012' />
+				<value target='scada_uart1::com_port' data='003' />
 				<value target='NetworkComms1::NetworkInterface' data='000' />
 				<value target='NetworkComms1::IPAddress' data='192.168.1.65' />
 				<value target='WIFIIP' data='192.168.1.90' />
 				<value target='ConsoleLog' data='1' />
-				<value target='LogMode' data='000' />
+				<value target='LogMode' data='001' />
 				<value target='ShowRaw' data='0' />
 			</values>
 			<events >
@@ -146,6 +150,9 @@ Command Log gives a more in depth analysis of the outgoing commands and incoming
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='ConsoleHandle' type='h32' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
+				</variable>
+				<variable public='0' >
+					<def class_type='variable' name='adc' type='u8' description='' isconst='0' isinit='0' usrinit='0' setinit='' />
 				</variable>
 				<variable public='0' >
 					<def class_type='variable' name='true' type='b1' description='' isconst='1' isinit='1' usrinit='1' setinit='1' />
@@ -1333,19 +1340,24 @@ Use the WIFIIsConnected first to check the WIFI is active. ' >
 						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='Ev_Initialise' />
 						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='Initialise' />
 						<command class_type='delay' title='Delay' cmdcolor='12632064' cmdcolor_sec='16769676' exp='1' type='2' />
-						<command class_type='loop' title='Loop' cmdcolor='12615680' cmdcolor_sec='15376912' type='0' exp='1' >
+						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='PWMEnable' >
+							<argument exp='0' />
+						</command>
+						<command class_type='loop' title='Loop' cmdcolor='12615680' cmdcolor_sec='15376912' type='2' exp='10' >
 							<flowline >
-								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='IOSetOutputPin' >
+								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='ADCSample8' >
+									<return exp='adc' />
 									<argument exp='0' />
-									<argument exp='1' />
 								</command>
-								<command class_type='delay' title='Delay' cmdcolor='12632064' cmdcolor_sec='16769676' exp='1' type='2' />
-								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='IOSetOutputPin' >
+								<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='PWMSetDuty8' >
 									<argument exp='0' />
-									<argument exp='0' />
+									<argument exp='adc' />
 								</command>
 								<command class_type='delay' title='Delay' cmdcolor='12632064' cmdcolor_sec='16769676' exp='1' type='2' />
 							</flowline>
+						</command>
+						<command class_type='call' title='Call Macro' cmdcolor='1879295' cmdcolor_sec='5751039' macro='PWMDisable' >
+							<argument exp='0' />
 						</command>
 					</flowline>
 				</macro>
@@ -1583,8 +1595,9 @@ Recommend callinng UARTRXCount first to check fo available data.' >
 					<value target='UseUART' data='1' />
 					<value target='ConsoleData' data='0' />
 					<value target='ConsoleColumns' data='64' />
+					<value target='COMPort1::AutoClose' data='1' />
 					<value target='DataSource' data='001' />
-					<value target='com_port' data='012' />
+					<value target='com_port' data='003' />
 					<value target='RefreshPorts' data='0' />
 					<value target='baud' data='115200' />
 					<value target='Injector' data='000' />
@@ -1603,7 +1616,7 @@ Recommend callinng UARTRXCount first to check fo available data.' >
 				<properties />
 				<values >
 					<value target='label' data='Interface Board' />
-					<value target='icon_image' data='' />
+					<value target='icon_image' data='@00000001:SCADA.png' />
 					<value target='flash_time' data='250' />
 					<value target='Tx_on_color' data='65280' />
 					<value target='Tx_off_color' data='13056' />
@@ -1640,7 +1653,7 @@ Recommend callinng UARTRXCount first to check fo available data.' >
 		<background rgb='7292207' img='' style='0' />
 		<camera xe='-8.71035' ye='2.26815' ze='192.736' xt='-8.71035' yt='2.26815' zt='0' xquat='0' yquat='0' zquat='0' wquat='1' />
 	</panel2d>
-	<panel3d shadows='0' lighting='2' brightness='0' perspective='0' >
+	<panel3d shadows='0' lighting='2' brightness='0' perspective='1' >
 		<background rgb='8409120' img='' style='0' />
 		<table rgb='7360576' img='' style='0' size='0' />
 		<camera xe='-2.86851' ye='2.52677' ze='176.51' xt='-2.86851' yt='2.52677' zt='0' xquat='0' yquat='0' zquat='0' wquat='1' />
@@ -1653,44 +1666,44 @@ Recommend callinng UARTRXCount first to check fo available data.' >
 		<camerakey6 xe='-173.205' ye='-173.205' ze='173.205' xt='0' yt='0' zt='0' xquat='-0.424708' yquat='0.17592' zquat='0.339851' wquat='0.820473' />
 	</panel3d>
 	<layout >
-		<view type='0' name='WIFISetSSID' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='Ev_Initialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='SendAndReceiveData' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='PWMSetDuty10' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='PWMSetDuty8' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='PWMSetPrescaler' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='SPIControlCSPin' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='SPIInitialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='SPIPrescaler' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='SPITransfer' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='DACEnable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='UARTRX' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='PWMEnable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='I2CSend' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='WIFIGetIP' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ServoSetPosition8' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='IOSetOutputPin' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ADCSample10' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='UARTRXCount' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ServoEnable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ServoDisable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='I2CStop' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='DACDisable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='I2CReceive' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='I2CStart' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='PWMDisable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='WIFIIsConnected' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='I2CRestart' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='UARTTX' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='UARTInitialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ADCSample8' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='ServoSetPosition16' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='DACOutput' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='UARTBaud' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='IOGetInputPin' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='I2CInitialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='Main' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
-		<view type='0' name='Initialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAAqAQAACoHAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='Main' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='PWMSetPrescaler' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='PWMSetDuty8' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='PWMEnable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='PWMDisable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='UARTTX' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='UARTRXCount' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='UARTRX' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='UARTInitialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='UARTBaud' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ServoSetPosition16' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ServoSetPosition8' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ServoEnable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ServoDisable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='SPITransfer' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='SPIPrescaler' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='SPIInitialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='SPIControlCSPin' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='PWMSetDuty10' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ADCSample10' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='I2CStop' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='I2CStart' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='I2CSend' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='I2CRestart' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='I2CReceive' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='I2CInitialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='DACOutput' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='DACEnable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='DACDisable' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='Initialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='ADCSample8' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='SendAndReceiveData' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='IOSetOutputPin' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='IOGetInputPin' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='WIFISetSSID' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='Ev_Initialise' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='WIFIGetIP' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
+		<view type='0' name='WIFIIsConnected' mode='0' placement='LAAAAAAAAAABAAAA---------------------wUAAAAeAAAApQMAACkGAAA' zoom='75' scrollx='0' scrolly='0' flags='0' />
 	</layout>
 </document>
 </root>
