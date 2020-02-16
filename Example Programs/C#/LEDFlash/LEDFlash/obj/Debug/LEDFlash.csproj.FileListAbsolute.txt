@@ -1,0 +1,7 @@
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\LEDFlash\LEDFlash\obj\Debug\LEDFlash.csprojResolveAssemblyReference.cache
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\LEDFlash\LEDFlash\obj\Debug\LEDFlash.csproj.CoreCompileInputs.cache
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\LEDFlash\LEDFlash\bin\Debug\LEDFlash.exe.config
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\LEDFlash\LEDFlash\bin\Debug\LEDFlash.exe
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\LEDFlash\LEDFlash\bin\Debug\LEDFlash.pdb
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\LEDFlash\LEDFlash\obj\Debug\LEDFlash.exe
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\LEDFlash\LEDFlash\obj\Debug\LEDFlash.pdb

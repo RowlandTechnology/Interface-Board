@@ -1,0 +1,7 @@
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\ADCandPWM\ADCandPWM\bin\Debug\ADCandPWM.exe.config
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\ADCandPWM\ADCandPWM\bin\Debug\ADCandPWM.exe
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\ADCandPWM\ADCandPWM\bin\Debug\ADCandPWM.pdb
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\ADCandPWM\ADCandPWM\obj\Debug\ADCandPWM.csprojResolveAssemblyReference.cache
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\ADCandPWM\ADCandPWM\obj\Debug\ADCandPWM.csproj.CoreCompileInputs.cache
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\ADCandPWM\ADCandPWM\obj\Debug\ADCandPWM.exe
+D:\RowlandTechnology\InterfaceBoard\Example Programs\C#\ADCandPWM\ADCandPWM\obj\Debug\ADCandPWM.pdb
