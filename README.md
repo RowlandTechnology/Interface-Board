@@ -13,7 +13,7 @@ Board supplied with firmware as requested. Firmware can be changed using a PICki
 
 To setup the WIFI to work with your own network you first need to power up the board using a USB connection or by applying a 5V power supply between the 5V and GND pins. 
 Next connect to the WIFI network hosted by the board with the network name InterfaceBoard using password all in lowercase as the Password. 
-Visit the website at page 192.16.4.1 and then enter your network details into the form provided. 
+Visit the website at page 192.168.4.1 and then enter your network details into the form provided. 
 On clicking ok the board will store the details in none volatile memory and attempt to connect to your network and establish a local IP address. 
 Refer to your router configuration page to see the IP address of the device. 
 If the WIFI network is not available then the board will revert back to it's setup mode allowing the network to be changed. 
